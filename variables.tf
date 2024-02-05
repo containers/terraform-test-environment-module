@@ -8,3 +8,9 @@ variable "aws_profile" {
   type        = string
   default     = "default"
 }
+
+variable "environment" {
+  description = "One of the following environments: dev, prod"
+  type        = string
+  default     = "dev"
+}
