@@ -4,12 +4,12 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.1.2"
 
-  name                   = "vpc-${var.environment}"
-  cidr                   = "10.0.0.0/16"
-  azs                    = data.aws_availability_zones.available.names
-  enable_nat_gateway     = true
-  single_nat_gateway     = true
-  one_nat_gateway_per_az = false
+  name = "vpc-${var.environment}"
+  cidr = "10.0.0.0/16"
+
+  azs             = slice(data.aws_availability_zones.available.names, 0, 0)
+  private_subnets = ["10.0.0.0/16"]
+  public_subnets  = ["10.0.101.0/16"]
 }
 
 module "ec2-instance" {
