@@ -7,7 +7,7 @@ module "vpc" {
   name = "vpc-${var.environment}"
   cidr = "10.0.0.0/16"
 
-  azs            = slice(data.aws_availability_zones.available.names, 0, 0)
+  azs            = slice(data.aws_availability_zones.available.names, 0, 1)
   public_subnets = ["10.0.1.0/24"]
 
   enable_dns_hostnames = true
