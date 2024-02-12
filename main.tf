@@ -10,11 +10,6 @@ data "aws_ami" "fedora" {
   }
 
   filter {
-    name   = "platform"
-    values = ["Fedora"]
-  }
-
-  filter {
     name   = "architecture"
     values = ["x86_64"]
   }
@@ -22,11 +17,6 @@ data "aws_ami" "fedora" {
   filter {
     name   = "virtualization-type"
     values = ["hvm"]
-  }
-
-  filter {
-    name   = "region"
-    values = [var.aws_region]
   }
 }
 
