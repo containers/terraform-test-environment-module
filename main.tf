@@ -44,7 +44,7 @@ module "key_pair" {
 
 resource "local_sensitive_file" "private_key" {
   content         = "${module.key_pair.private_key_openssh}\n"
-  filename        = "${path.module}/${var.ssh_private_key_filename}"
+  filename        = "${var.root_directory}/${var.ssh_private_key_filename}"
   file_permission = 0400
 }
 
