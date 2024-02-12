@@ -34,6 +34,14 @@ module "vpc" {
   enable_dns_support   = true
 }
 
+module "key_pair" {
+  source  = "terraform-aws-modules/key-pair/aws"
+  version = "2.0.2"
+
+  key_name           = "kp-${var.environment}"
+  create_private_key = true
+}
+
 module "ec2-instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "5.6.0"
@@ -43,4 +51,5 @@ module "ec2-instance" {
   subnet_id                   = module.vpc.public_subnets[0]
   ami                         = data.aws_ami.fedora.id
   associate_public_ip_address = true
+  key_name                    = module.key_pair.key_pair_name
 }
