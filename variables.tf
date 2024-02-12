@@ -20,3 +20,9 @@ variable "ssh_private_key_filename" {
   type        = string
   default     = "dev.pem"
 }
+
+variable "root_directory" {
+  description = "Directory where the private key file is saved"
+  type        = string
+  default     = "."
+}
