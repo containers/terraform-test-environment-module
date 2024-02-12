@@ -42,10 +42,22 @@ module "key_pair" {
   create_private_key = true
 }
 
-resource "local_file" "private_key" {
-  content         = module.key_pair.private_key_openssh
-  filename        = var.ssh_private_key_filename
+resource "local_sensitive_file" "private_key" {
+  content         = "${module.key_pair.private_key_openssh}\n"
+  filename        = "${path.module}/${var.ssh_private_key_filename}"
   file_permission = 0400
+}
+
+module "security_group" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "5.1.0"
+
+  name   = "sg-${var.environment}"
+  vpc_id = module.vpc.vpc_id
+
+  ingress_cidr_blocks = ["0.0.0.0/0"]
+  ingress_rules       = ["ssh-tcp"]
+  egress_rules        = ["all-all"]
 }
 
 module "ec2-instance" {
@@ -58,4 +70,5 @@ module "ec2-instance" {
   ami                         = data.aws_ami.fedora.id
   associate_public_ip_address = true
   key_name                    = module.key_pair.key_pair_name
+  vpc_security_group_ids      = [module.security_group.security_group_id]
 }
