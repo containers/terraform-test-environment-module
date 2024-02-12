@@ -42,6 +42,12 @@ module "key_pair" {
   create_private_key = true
 }
 
+resource "local_file" "private_key" {
+  content         = module.key_pair.private_key_openssh
+  filename        = var.ssh_private_key_filename
+  file_permission = 0400
+}
+
 module "ec2-instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "5.6.0"

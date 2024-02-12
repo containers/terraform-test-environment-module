@@ -14,3 +14,9 @@ variable "environment" {
   type        = string
   default     = "dev"
 }
+
+variable "ssh_private_key_filename" {
+  description = "SSH private key file name"
+  type        = string
+  default     = "dev.pem"
+}
