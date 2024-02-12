@@ -1,5 +1,35 @@
 data "aws_availability_zones" "available" {}
 
+data "aws_ami" "fedora" {
+  most_recent = true
+  owners      = ["125523088429"]
+
+  filter {
+    name   = "name"
+    values = ["Fedora-Cloud-Base-*"]
+  }
+
+  filter {
+    name   = "platform"
+    values = ["Fedora"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "region"
+    values = [var.aws_region]
+  }
+}
+
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.1.2"
@@ -21,4 +51,5 @@ module "ec2-instance" {
   name              = "i-${var.environment}"
   availability_zone = module.vpc.azs[0]
   subnet_id         = module.vpc.public_subnets[0]
+  ami               = data.aws_ami.fedora.id
 }
