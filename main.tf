@@ -38,8 +38,9 @@ module "ec2-instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "5.6.0"
 
-  name              = "i-${var.environment}"
-  availability_zone = module.vpc.azs[0]
-  subnet_id         = module.vpc.public_subnets[0]
-  ami               = data.aws_ami.fedora.id
+  name                        = "i-${var.environment}"
+  availability_zone           = module.vpc.azs[0]
+  subnet_id                   = module.vpc.public_subnets[0]
+  ami                         = data.aws_ami.fedora.id
+  associate_public_ip_address = true
 }
