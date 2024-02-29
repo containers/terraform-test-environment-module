@@ -1,6 +1,9 @@
 ---
 include:
-  - remote: https://gitlab.com/platform-engineering-org/gitlab-ci/-/raw/main/templates/pre-commit.yml # yamllint disable-line rule:line-length
+  - remote: https://gitlab.com/platform-engineering-org/gitlab-ci/-/raw/main/templates/pre-commit.gitlab-ci.yml # yamllint disable-line rule:line-length
+
+stages:
+  - pre-commit
 
 pre-commit:
   variables:
@@ -15,9 +18,10 @@ terraform-validate:
       - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  stage: test
   before_script:
     - apk --no-cache add py3-pip openssh-client git bash
     - pip3 install --break-system-packages pre-commit
   script:
     - pre-commit run -a terraform_validate
+  needs: []
+  stage: pre-commit
