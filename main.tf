@@ -2,11 +2,11 @@ data "aws_availability_zones" "available" {}
 
 data "aws_ami" "fedora" {
   most_recent = true
-  owners      = ["125523088429"]
+  owners      = var.aws_ami_owners
 
   filter {
     name   = "name"
-    values = ["Fedora-Cloud-Base-*"]
+    values = var.aws_ami_name
   }
 
   filter {
