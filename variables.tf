@@ -30,11 +30,9 @@ variable "root_directory" {
 variable "aws_ami_owners" {
   description = "AWS AMI Owners"
   type        = list(string)
-  default     = ["041287970199"]
 }
 
 variable "aws_ami_name" {
   description = "AWS AMI name"
   type        = list(string)
-  default     = ["fedora-bootc-ami"]
 }
