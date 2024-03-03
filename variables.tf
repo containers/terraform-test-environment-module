@@ -41,7 +41,13 @@ variable "aws_user_data" {
   description = "AWS user_data"
   type        = string
   default     = <<-EOT
-    #!/bin/bash
-    echo "Hello Terraform!"
+    #!/usr/bin/env bash
+
+    sudo dnf install -y flatpak xorg-x11-xauth
+    sudo dnf clean all
+    touch ~/.Xauthority
+    flatpak update
+    flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
+    flatpak install -y --user flathub io.podman_desktop.PodmanDesktop
   EOT
 }
