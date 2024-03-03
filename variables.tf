@@ -36,3 +36,12 @@ variable "aws_ami_name" {
   description = "AWS AMI name"
   type        = list(string)
 }
+
+variable "aws_user_data" {
+  description = "AWS user_data"
+  type        = string
+  default     = <<-EOT
+    #!/bin/bash
+    echo "Hello Terraform!"
+  EOT
+}
