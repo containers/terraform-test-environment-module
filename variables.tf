@@ -49,5 +49,9 @@ variable "aws_user_data" {
     flatpak update
     flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak install -y --user flathub io.podman_desktop.PodmanDesktop
+    sudo echo "X11Forwarding yes" >> /etc/ssh/sshd_config
+    sudo echo "X11DisplayOffset 10" >> /etc/ssh/sshd_config
+    sudo echo "X11UseLocalhost yes" >> /etc/ssh/sshd_config
+    sudo systemctl restart sshd
   EOT
 }
