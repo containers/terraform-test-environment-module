@@ -71,4 +71,5 @@ module "ec2-instance" {
   associate_public_ip_address = true
   key_name                    = module.key_pair.key_pair_name
   vpc_security_group_ids      = [module.security_group.security_group_id]
+  user_data                   = var.aws_user_data
 }
