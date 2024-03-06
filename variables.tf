@@ -43,7 +43,7 @@ variable "aws_user_data" {
   default     = <<-EOT
     #!/usr/bin/env bash
 
-    sudo dnf install -y flatpak xorg-x11-xauth
+    sudo dnf install -y flatpak xorg-x11-xauth xorg-x11-xdm
     sudo dnf clean all
     touch ~/.Xauthority
     flatpak update
