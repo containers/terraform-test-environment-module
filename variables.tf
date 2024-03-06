@@ -36,22 +36,3 @@ variable "aws_ami_name" {
   description = "AWS AMI name"
   type        = list(string)
 }
-
-variable "aws_user_data" {
-  description = "AWS user_data"
-  type        = string
-  default     = <<-EOT
-    #!/usr/bin/env bash
-
-    sudo dnf install -y flatpak xorg-x11-xauth xorg-x11-xdm
-    sudo dnf clean all
-    touch ~/.Xauthority
-    flatpak update
-    flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
-    flatpak install -y --user flathub io.podman_desktop.PodmanDesktop
-    sudo echo "X11Forwarding yes" >> /etc/ssh/sshd_config
-    sudo echo "X11DisplayOffset 10" >> /etc/ssh/sshd_config
-    sudo echo "X11UseLocalhost yes" >> /etc/ssh/sshd_config
-    sudo systemctl restart sshd
-  EOT
-}

@@ -20,6 +20,10 @@ data "aws_ami" "fedora" {
   }
 }
 
+data "local_file" "user_data" {
+  filename = "${path.module}/scripts/user_data.sh"
+}
+
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.1.2"
@@ -71,5 +75,5 @@ module "ec2-instance" {
   associate_public_ip_address = true
   key_name                    = module.key_pair.key_pair_name
   vpc_security_group_ids      = [module.security_group.security_group_id]
-  user_data                   = var.aws_user_data
+  user_data                   = data.local_file.user_data.content
 }
