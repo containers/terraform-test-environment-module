@@ -1,17 +1,29 @@
 #!/usr/bin/env bash
 
-dnf install -y flatpak xorg-x11-xauth xorg-x11-xdm
+dnf install -y podman flatpak xorg-x11-xauth xorg-x11-xdm
 dnf clean all
-echo "X11Forwarding yes" >> /etc/ssh/sshd_config
-echo "X11DisplayOffset 10" >> /etc/ssh/sshd_config
-echo "X11UseLocalhost yes" >> /etc/ssh/sshd_config
+tee /etc/ssh/sshd_config <<EOF
+X11Forwarding yes
+X11DisplayOffset 10
+X11UseLocalhost yes
+EOF
 systemctl restart sshd
 
 sudo -u fedora -i <<'EOF'
 
 touch ~/.Xauthority
+echo "XAuthLocation /usr/bin/xauth" >> /etc/ssh/ssh_config
 flatpak update
 flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install -y --user flathub io.podman_desktop.PodmanDesktop
 
+EOF
+
+cd /var/lib/flatpak
+mkdir -p repo/objects repo/tmp
+tee repo/config <<EOF
+[core]
+repo_version=1
+mode=bare-user-only
+min-free-space-size=500MB
 EOF
