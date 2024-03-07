@@ -1,6 +1,6 @@
 data "aws_availability_zones" "available" {}
 
-data "aws_ami" "fedora" {
+data "aws_ami" "ami" {
   most_recent = true
   owners      = var.aws_ami_owners
 
@@ -20,8 +20,11 @@ data "aws_ami" "fedora" {
   }
 }
 
-data "local_file" "user_data" {
-  filename = "${path.module}/scripts/user_data.sh"
+data "template_file" "user_data" {
+  template = "${file("${path.module}/templates/user_data.sh")}"
+  vars = {
+    aws_cache_bucket = "${var.aws_cache_bucket}"
+  }
 }
 
 module "vpc" {
@@ -60,8 +63,67 @@ module "security_group" {
   vpc_id = module.vpc.vpc_id
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
-  ingress_rules       = ["ssh-tcp"]
+  ingress_rules       = ["ssh-tcp", "consul-webui-https-tcp", ]
   egress_rules        = ["all-all"]
+
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 8001
+      to_port     = 8001
+      protocol    = "tcp"
+      cidr_blocks = "0.0.0.0/0"
+    }
+  ]
+}
+
+data "aws_iam_policy_document" "assume_role_document" {
+  statement {
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+    actions = [
+      "sts:AssumeRole"
+    ]
+  }
+}
+
+resource "aws_iam_role" "instance_role" {
+  name               = "instance_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_document.json
+}
+
+resource "aws_iam_instance_profile" "instance_profile" {
+  name = "instance_profile"
+  role = aws_iam_role.instance_role.name
+}
+
+data "aws_iam_policy_document" "instance_policy_document" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetBucketLocation",
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:PutObject",
+      "s3:GetBucketAcl"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.aws_cache_bucket}",
+      "arn:aws:s3:::${var.aws_cache_bucket}/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "instance_policy" {
+  name   = "instance-policy"
+  policy = data.aws_iam_policy_document.instance_policy_document.json
+}
+
+resource "aws_iam_role_policy_attachment" "iam_role_policy_attachment" {
+  role       = aws_iam_role.instance_role.name
+  policy_arn = aws_iam_policy.instance_policy.arn
 }
 
 module "ec2-instance" {
@@ -71,9 +133,17 @@ module "ec2-instance" {
   name                        = var.environment
   availability_zone           = module.vpc.azs[0]
   subnet_id                   = module.vpc.public_subnets[0]
-  ami                         = data.aws_ami.fedora.id
+  ami                         = data.aws_ami.ami.id
   associate_public_ip_address = true
   key_name                    = module.key_pair.key_pair_name
   vpc_security_group_ids      = [module.security_group.security_group_id]
-  user_data                   = data.local_file.user_data.content
+  user_data                   = data.template_file.user_data.rendered
+  instance_type               = var.aws_instance_type
+  iam_instance_profile        = aws_iam_instance_profile.instance_profile.name
+
+  root_block_device = [
+    {
+      volume_size = var.aws_volume_size
+    }
+  ]
 }

@@ -36,3 +36,20 @@ variable "aws_ami_name" {
   description = "AWS AMI name"
   type        = list(string)
 }
+
+variable "aws_instance_type" {
+  description = "AWS Instance Type"
+  type        = string
+  default     = "t3.micro"
+}
+
+variable "aws_volume_size" {
+  description = "AWS EC2 root block device volume size"
+  type        = number
+  default     = 10
+}
+
+variable "aws_cache_bucket" {
+  description = "AWS Bucket for AI models cache"
+  type        = string
+}
