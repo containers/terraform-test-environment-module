@@ -43,7 +43,7 @@ module "vpc" {
 
 module "key_pair" {
   source  = "terraform-aws-modules/key-pair/aws"
-  version = "2.0.2"
+  version = "2.0.3"
 
   key_name           = var.environment
   create_private_key = true
@@ -128,7 +128,7 @@ resource "aws_iam_role_policy_attachment" "iam_role_policy_attachment" {
 
 module "ec2-instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "5.6.0"
+  version = "5.6.1"
 
   name                        = var.environment
   availability_zone           = module.vpc.azs[0]
