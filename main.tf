@@ -29,7 +29,7 @@ data "template_file" "user_data" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.5.3"
+  version = "5.6.0"
 
   name = var.environment
   cidr = "10.0.0.0/16"
