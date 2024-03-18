@@ -57,7 +57,7 @@ resource "local_sensitive_file" "private_key" {
 
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "5.1.1"
+  version = "5.1.2"
 
   name   = var.environment
   vpc_id = module.vpc.vpc_id
