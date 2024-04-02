@@ -91,38 +91,6 @@ resource "aws_iam_role" "instance_role" {
   assume_role_policy = data.aws_iam_policy_document.assume_role_document.json
 }
 
-resource "aws_iam_instance_profile" "instance_profile" {
-  name = "instance_profile"
-  role = aws_iam_role.instance_role.name
-}
-
-data "aws_iam_policy_document" "instance_policy_document" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "s3:GetBucketLocation",
-      "s3:GetObject",
-      "s3:ListBucket",
-      "s3:PutObject",
-      "s3:GetBucketAcl"
-    ]
-    resources = [
-      "arn:aws:s3:::${var.aws_cache_bucket}",
-      "arn:aws:s3:::${var.aws_cache_bucket}/*"
-    ]
-  }
-}
-
-resource "aws_iam_policy" "instance_policy" {
-  name   = "instance-policy"
-  policy = data.aws_iam_policy_document.instance_policy_document.json
-}
-
-resource "aws_iam_role_policy_attachment" "iam_role_policy_attachment" {
-  role       = aws_iam_role.instance_role.name
-  policy_arn = aws_iam_policy.instance_policy.arn
-}
-
 module "ec2-instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "5.6.1"
@@ -136,7 +104,6 @@ module "ec2-instance" {
   vpc_security_group_ids      = [module.security_group.security_group_id]
   user_data                   = data.template_file.user_data.rendered
   instance_type               = var.aws_instance_type
-  iam_instance_profile        = aws_iam_instance_profile.instance_profile.name
 
   root_block_device = [
     {
