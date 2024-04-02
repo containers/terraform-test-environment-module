@@ -20,10 +20,6 @@ data "aws_ami" "ami" {
   }
 }
 
-data "template_file" "user_data" {
-  template = "${file("${path.module}/templates/user_data.sh")}"
-}
-
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.6.0"
@@ -102,7 +98,6 @@ module "ec2-instance" {
   associate_public_ip_address = true
   key_name                    = module.key_pair.key_pair_name
   vpc_security_group_ids      = [module.security_group.security_group_id]
-  user_data                   = data.template_file.user_data.rendered
   instance_type               = var.aws_instance_type
 
   root_block_device = [
