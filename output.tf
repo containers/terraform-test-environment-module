@@ -3,9 +3,9 @@ locals {
 }
 
 output "host" {
-  value = ${module.ec2-instance.public_dns}
+  value = "${module.ec2-instance.public_dns}"
 }
 
 output "key" {
-  value = ${module.key_pair.private_key_openssh}
+  value = "${module.key_pair.private_key_openssh}"
 }
