@@ -48,8 +48,3 @@ variable "aws_volume_size" {
   type        = number
   default     = 10
 }
-
-variable "aws_cache_bucket" {
-  description = "AWS Bucket for AI models cache"
-  type        = string
-}

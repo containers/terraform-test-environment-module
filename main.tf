@@ -22,9 +22,6 @@ data "aws_ami" "ami" {
 
 data "template_file" "user_data" {
   template = "${file("${path.module}/templates/user_data.sh")}"
-  vars = {
-    aws_cache_bucket = "${var.aws_cache_bucket}"
-  }
 }
 
 module "vpc" {
