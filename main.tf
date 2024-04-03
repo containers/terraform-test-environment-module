@@ -102,7 +102,7 @@ data "aws_iam_policy_document" "instance_policy_document" {
   }
   statement {
     effect    = "Deny"
-    actions   = [*]
+    actions   = ["*"]
     resources = ["*"]
     condition = {
       test     = "NumericLessThan"
