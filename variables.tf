@@ -59,7 +59,7 @@ variable "aws_secret_key" {
   type        = string
 }
 
-variables "provision_script" {
+variable "provision_script" {
   description = Provision script key
   type        = string
 }
