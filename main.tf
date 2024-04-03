@@ -87,6 +87,31 @@ resource "aws_iam_role" "instance_role" {
   assume_role_policy = data.aws_iam_policy_document.assume_role_document.json
 }
 
+resource "aws_iam_instance_profile" "instance_profile" {
+  name = "instance_profile"
+  role = aws_iam_role.instance_role.name
+}
+
+data "aws_iam_policy_document" "instance_policy_document" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ec2:UpdateInstanceMetadata"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "instance_policy" {
+  name   = "instance-policy"
+  policy = data.aws_iam_policy_document.instance_policy_document.json
+}
+
+resource "aws_iam_role_policy_attachment" "iam_role_policy_attachment" {
+  role       = aws_iam_role.instance_role.name
+  policy_arn = aws_iam_policy.instance_policy.arn
+}
+
 module "ec2-instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "5.6.1"
@@ -99,6 +124,7 @@ module "ec2-instance" {
   key_name                    = module.key_pair.key_pair_name
   vpc_security_group_ids      = [module.security_group.security_group_id]
   instance_type               = var.aws_instance_type
+  iam_instance_profile        = aws_iam_instance_profile.instance_profile.name
   user_data                   = var.provision_script
 
   root_block_device = [
