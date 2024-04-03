@@ -132,4 +132,10 @@ module "ec2-instance" {
       volume_size = var.aws_volume_size
     }
   ]
+
+  metadata_options = {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 8
+  }
 }
