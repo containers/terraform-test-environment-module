@@ -106,12 +106,13 @@ module "ec2-instance" {
       volume_size = var.aws_volume_size
     }
   ]
+}
 
-  provisioner "remote-exec" {
-    inline = [
-      # Wait until user data script is finished
-      "while [ ! -f /var/log/user-data.log ]; do sleep 2; done",
-      "echo 'User data script execution completed'"
-    ]
+resource "aws_instance" "testenv" {
+  instance_id = module.ec2_instance.instance_id
+  
+  // Wait until the instance reaches "ok" state
+  provisioner "local-exec" {
+    command = "aws ec2 wait instance-status-ok --instance-ids ${aws_instance.testenv.id}"
   }
 }
