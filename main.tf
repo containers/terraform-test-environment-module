@@ -100,6 +100,16 @@ data "aws_iam_policy_document" "instance_policy_document" {
     ]
     resources = ["*"]
   }
+  statement {
+    effect    = "Deny"
+    actions   = [*]
+    resources = ["*"]
+    condition = {
+      test     = "NumericLessThan"
+      variable = "ec2:RoleDelivery"
+      values   = ["2.0"]
+    }
+  }
 }
 
 resource "aws_iam_policy" "instance_policy" {
