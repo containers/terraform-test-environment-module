@@ -109,10 +109,10 @@ module "ec2-instance" {
 }
 
 resource "aws_instance" "testenv" {
-  instance_id = module.ec2_instance.instance_id
-  
+    depends_on = [module.ec2_instance]
+
   // Wait until the instance reaches "ok" state
   provisioner "local-exec" {
-    command = "aws ec2 wait instance-status-ok --instance-ids ${aws_instance.testenv.id}"
+    command = "aws ec2 wait instance-status-ok --instance-ids ${module.ec2_instance.instance_id}"
   }
 }
