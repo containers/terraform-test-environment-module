@@ -96,9 +96,9 @@ data "aws_iam_policy_document" "instance_policy_document" {
   statement {
     effect = "Allow"
     actions = [
-      "ec2:UpdateInstanceMetadata"
+      "ec2:Metadata"
     ]
-    resources = ["*"]
+    resource = "*"
   }
 }
 
