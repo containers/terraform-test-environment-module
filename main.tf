@@ -98,7 +98,7 @@ data "aws_iam_policy_document" "instance_policy_document" {
     actions = [
       "ec2:Metadata"
     ]
-    resource = "*"
+    resources = ["*"]
   }
 }
 
