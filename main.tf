@@ -99,15 +99,19 @@ module "ec2-instance" {
   key_name                    = module.key_pair.key_pair_name
   vpc_security_group_ids      = [module.security_group.security_group_id]
   instance_type               = var.aws_instance_type
+  user_data                   = var.provision_script
 
   root_block_device = [
     {
       volume_size = var.aws_volume_size
     }
   ]
-}
 
-provisioner "file" {
-  source      = var.provision_script
-  destination = "/tmp/provision.sh"
+  provisioner "remote-exec" {
+    inline = [
+      # Wait until user data script is finished
+      "while [ ! -f /var/log/user-data.log ]; do sleep 2; done",
+      "echo 'User data script execution completed'"
+    ]
+  }
 }
