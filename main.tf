@@ -109,7 +109,7 @@ module "ec2-instance" {
 }
 
 resource "null_resource" "wait_for" {
-    depends_on = [module.ec2_instance]
+    depends_on = [module.ec2-instance]
 
   // Wait until the instance reaches "ok" state
   provisioner "local-exec" {
