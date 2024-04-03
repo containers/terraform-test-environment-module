@@ -60,6 +60,6 @@ variable "aws_secret_key" {
 }
 
 variable "provision_script" {
-  description = Provision script key
+  description = "Provision script key"
   type        = string
 }
