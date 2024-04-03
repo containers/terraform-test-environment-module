@@ -113,6 +113,6 @@ resource "null_resource" "wait_for" {
 
   // Wait until the instance reaches "ok" state
   provisioner "local-exec" {
-    command = "aws ec2 wait instance-status-ok --instance-ids ${module.ec2-instance.aws_instance.this[0].instance_id}"
+    command = "aws ec2 wait instance-status-ok --instance-ids ${module.ec2-instance.id}"
   }
 }
