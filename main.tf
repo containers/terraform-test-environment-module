@@ -106,3 +106,8 @@ module "ec2-instance" {
     }
   ]
 }
+
+provisioner "file" {
+  source      = var.provision_script
+  destination = "/tmp/provision.sh"
+}

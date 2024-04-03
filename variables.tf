@@ -58,3 +58,8 @@ variable "aws_secret_key" {
   description = "AWS secret key"
   type        = string
 }
+
+variables "provision_script" {
+  description = Provision script key
+  type        = string
+}
