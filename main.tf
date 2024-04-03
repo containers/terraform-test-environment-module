@@ -108,7 +108,7 @@ module "ec2-instance" {
   ]
 }
 
-resource "aws_instance" "testenv" {
+resource "null_resource" "wait_for" {
     depends_on = [module.ec2_instance]
 
   // Wait until the instance reaches "ok" state
