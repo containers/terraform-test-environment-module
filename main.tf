@@ -114,7 +114,7 @@ module "ec2-instance" {
   subnet_id                   = module.vpc.public_subnets[0]
   ami                         = data.aws_ami.ami.id
   associate_public_ip_address = true
-  key_name                    = "liora-mac" # can(var.key_name) ? var.key_name : module.key_pair.key_pair_name
+  key_name                    = module.key_pair.key_pair_name
   vpc_security_group_ids      = [module.security_group.security_group_id]
   instance_type               = var.aws_instance_type
   iam_instance_profile        = aws_iam_instance_profile.instance_profile.name
@@ -125,4 +125,34 @@ module "ec2-instance" {
       volume_size = var.aws_volume_size
     }
   ]
+}
+
+resource "aws_ssm_document" "wait_for_completion" {
+  name          = "wait_for_completion"
+  document_type = "Command"
+  content = <<-EOF
+    {
+      "schemaVersion": "1.2",
+      "description": "Wait for user_data completion",
+      "mainSteps": [
+        {
+          "action": "aws:runShellScript",
+          "name": "wait_for_user_data_completion",
+          "inputs": {
+            "runCommand": [
+              "while [ ! -f /tmp/user_data_completed ]; do sleep 5; done"
+            ]
+          }
+        }
+      ]
+    }
+  EOF
+}
+
+resource "aws_ssm_association" "execute_wait_command" {
+  name               = "execute_wait_command"
+  instance_id        = module.ec2-instance.id
+  document_name      = aws_ssm_document.wait_for_completion.name
+  parameters         = {}
+  wait_for_success   = true
 }
