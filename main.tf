@@ -131,15 +131,15 @@ resource "aws_ssm_document" "wait_for_completion" {
   name          = "wait_for_completion"
   document_type = "Command"
   content = jsonencode({
-    schemaVersion = "1.2",
-    description   = "Wait for user_data completion",
-    runtimeConfig = {
-      aws:runShellScript = {
-        properties = [
+    "schemaVersion": "1.2",
+    "description": "Wait for user data completion",
+    "parameters": {},
+    "runtimeConfig": {
+      "aws:runShellScript": {
+        "properties": [
           {
-            "runCommand" = [
-              "while [ ! -f /tmp/user_data_completed ]; do sleep 5; done"
-            ]
+            "id": "0.aws:runShellScript",
+            "runCommand": ["while [ ! -f /tmp/user_data_completed ]; do sleep 5; done"]
           }
         ]
       }
