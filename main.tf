@@ -101,10 +101,6 @@ resource "aws_iam_role_policy_attachment" "iam_role_policy_attachment" {
   policy_arn = data.aws_iam_policy.ssm-policy.arn
 }
 
-locals {
-  provision_script_content = file(var.provision_script)
-}
-
 module "ec2-instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "5.6.1"
@@ -118,7 +114,7 @@ module "ec2-instance" {
   vpc_security_group_ids      = [module.security_group.security_group_id]
   instance_type               = var.aws_instance_type
   iam_instance_profile        = aws_iam_instance_profile.instance_profile.name
-  user_data                   = local.provision_script_content
+  user_data                   = var.provision_script
 
   root_block_device = [
     {
