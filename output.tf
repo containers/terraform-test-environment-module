@@ -5,3 +5,7 @@ locals {
 output "id" {
   value = "${module.ec2-instance.id}"
 }
+
+output "host" {
+  value = "${module.ec2-instance.public_dns}"
+}
