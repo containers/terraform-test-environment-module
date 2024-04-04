@@ -102,7 +102,7 @@ resource "aws_iam_role_policy_attachment" "iam_role_policy_attachment" {
 }
 
 locals {
-  provision_script_content = file(${var.provision_script})
+  provision_script_content = file(var.provision_script)
 }
 
 module "ec2-instance" {
