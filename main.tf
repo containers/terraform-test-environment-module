@@ -132,7 +132,7 @@ resource "aws_ssm_document" "wait_for_completion" {
   document_type = "Command"
   content = jsonencode({
     "schemaVersion": "1.2",
-    "description": "Wait for user data completion",
+    "description": "Check file existence on EC2 instance",
     "parameters": {},
     "runtimeConfig": {
       "aws:runShellScript": {
@@ -152,5 +152,15 @@ resource "aws_ssm_association" "execute_wait_command" {
   targets {
     key    = "InstanceIds"
     values = [module.ec2-instance.id]
+  }
+}
+
+resource "null_resource" "wait_for_file" {
+  triggers = {
+    instance_id = module.ec2-instance.id
+  }
+
+  provisioner "local-exec" {
+    command = "aws ssm send-command --document-name ${aws_ssm_document.wait_for_completion.name} --instance-ids ${module.ec2-instance.id}"
   }
 }
