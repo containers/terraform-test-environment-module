@@ -92,28 +92,13 @@ resource "aws_iam_instance_profile" "instance_profile" {
   role = aws_iam_role.instance_role.name
 }
 
-data "aws_iam_policy_document" "instance_policy_document" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "ssmmessages:CreateControlChannel",
-      "ssmmessages:CreateDataChannel",
-      "ssmmessages:OpenControlChannel",
-      "ssmmessages:OpenDataChannel",
-      "s3:GetEncryptionConfiguration"
-    ]
-    resources = ["*"]
-  }
-}
-
-resource "aws_iam_policy" "instance_policy" {
-  name   = "instance-policy"
-  policy = data.aws_iam_policy_document.instance_policy_document.json
+data "aws_iam_policy" "ssm-policy" {
+  name = "AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_role_policy_attachment" "iam_role_policy_attachment" {
   role       = aws_iam_role.instance_role.name
-  policy_arn = aws_iam_policy.instance_policy.arn
+  policy_arn = aws_iam_policy.ssm-policy.arn
 }
 
 module "ec2-instance" {
