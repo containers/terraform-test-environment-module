@@ -149,6 +149,8 @@ resource "aws_ssm_document" "wait_for_completion" {
 
 resource "aws_ssm_association" "execute_wait_command" {
   name               = aws_ssm_document.wait_for_completion.name
-  instance_id        = module.ec2-instance.id
-  document_version   = "$LATEST"
+  targets {
+    key    = "InstanceIds"
+    values = [module.ec2-instance.id]
+  }
 }
