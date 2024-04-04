@@ -110,7 +110,7 @@ module "ec2-instance" {
   subnet_id                   = module.vpc.public_subnets[0]
   ami                         = data.aws_ami.ami.id
   associate_public_ip_address = true
-  key_name                    = var.key_name != null ? var.key_name : module.key_pair.key_pair_name
+  key_name                    = can(var.key_name) ? var.key_name : module.key_pair.key_pair_name
   vpc_security_group_ids      = [module.security_group.security_group_id]
   instance_type               = var.aws_instance_type
   iam_instance_profile        = aws_iam_instance_profile.instance_profile.name
