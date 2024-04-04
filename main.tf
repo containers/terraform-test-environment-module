@@ -151,6 +151,4 @@ resource "aws_ssm_association" "execute_wait_command" {
   name               = aws_ssm_document.wait_for_completion.name
   instance_id        = module.ec2-instance.id
   document_version   = "$LATEST"
-  parameters         = {}
-  wait_for_success_timeout_seconds = 1000
 }
