@@ -130,23 +130,19 @@ module "ec2-instance" {
 resource "aws_ssm_document" "wait_for_completion" {
   name          = "wait_for_completion"
   document_type = "Command"
-  content = <<-EOF
-    {
-      "schemaVersion": "1.2",
-      "description": "Wait for user_data completion",
-      "mainSteps": [
-        {
-          "action": "aws:runShellScript",
-          "name": "wait_for_user_data_completion",
-          "inputs": {
-            "runCommand": [
-              "while [ ! -f /tmp/user_data_completed ]; do sleep 5; done"
-            ]
-          }
+  content = jsonencode({
+    schemaVersion = "1.2",
+    description   = "Wait for user_data completion",
+    runtimeConfig = {
+      aws:runShellScript = {
+        properties = {
+          "runCommand" = [
+            "while [ ! -f /tmp/user_data_completed ]; do sleep 5; done"
+          ]
         }
-      ]
+      }
     }
-  EOF
+  })
 }
 
 resource "aws_ssm_association" "execute_wait_command" {
