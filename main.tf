@@ -96,7 +96,11 @@ data "aws_iam_policy_document" "instance_policy_document" {
   statement {
     effect = "Allow"
     actions = [
-      "ec2:*"
+      "ssmmessages:CreateControlChannel",
+      "ssmmessages:CreateDataChannel",
+      "ssmmessages:OpenControlChannel",
+      "ssmmessages:OpenDataChannel",
+      "s3:GetEncryptionConfiguration"
     ]
     resources = ["*"]
   }
