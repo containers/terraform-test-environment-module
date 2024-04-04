@@ -135,11 +135,13 @@ resource "aws_ssm_document" "wait_for_completion" {
     description   = "Wait for user_data completion",
     runtimeConfig = {
       aws:runShellScript = {
-        properties = {
-          "runCommand" = [
-            "while [ ! -f /tmp/user_data_completed ]; do sleep 5; done"
-          ]
-        }
+        properties = [
+          {
+            "runCommand" = [
+              "while [ ! -f /tmp/user_data_completed ]; do sleep 5; done"
+            ]
+          }
+        ]
       }
     }
   })
