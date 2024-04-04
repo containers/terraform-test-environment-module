@@ -98,7 +98,7 @@ data "aws_iam_policy" "ssm-policy" {
 
 resource "aws_iam_role_policy_attachment" "iam_role_policy_attachment" {
   role       = aws_iam_role.instance_role.name
-  policy_arn = aws_iam_policy.ssm-policy.arn
+  policy_arn = data.aws_iam_policy.ssm-policy.arn
 }
 
 module "ec2-instance" {
