@@ -38,7 +38,7 @@ module "key_pair" {
   source  = "terraform-aws-modules/key-pair/aws"
   version = "2.0.3"
 
-  key_name           = var.environment
+  key_name           = "${var.environment}-${random_id.unique_suffix.hex}"
   create_private_key = true
 }
 
@@ -82,8 +82,12 @@ data "aws_iam_policy_document" "assume_role_document" {
   }
 }
 
+resource "random_id" "unique_suffix" {
+  byte_length = 4
+}
+
 resource "aws_iam_role" "instance_role" {
-  name               = "instance_role"
+  name               = "instance_role-${random_id.unique_suffix.hex}"
   assume_role_policy = data.aws_iam_policy_document.assume_role_document.json
 }
 
