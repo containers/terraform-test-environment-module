@@ -92,7 +92,7 @@ resource "aws_iam_role" "instance_role" {
 }
 
 resource "aws_iam_instance_profile" "instance_profile" {
-  name = "instance_profile"
+  name = "instance_profile-${random_id.unique_suffix.hex}"
   role = aws_iam_role.instance_role.name
 }
 
