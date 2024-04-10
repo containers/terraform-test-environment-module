@@ -9,3 +9,7 @@ output "id" {
 output "host" {
   value = "${module.ec2-instance.public_dns}"
 }
+
+output "pem_filename" {
+  value = "${pem_filename}
+}
