@@ -63,7 +63,3 @@ variable "aws_ami_architecture" {
   description = "AWS AMI architecture"
   type        = string
 }
-variable "provision_script" {
-  description = "Provision script key"
-  type        = string
-}
