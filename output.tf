@@ -11,5 +11,5 @@ output "host" {
 }
 
 output "pem_filename" {
-  value = "${pem_filename}"
+  value = "${local.pem_filename}"
 }
