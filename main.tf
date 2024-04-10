@@ -130,3 +130,11 @@ module "ec2-instance" {
     }
   ]
 }
+
+resource "local_file" "ansible_inventory" {
+  filename = "hosts.ini"
+  content = <<-EOT
+    [test_environments]
+    test_environment_host ansible_host=${module.ec2-instance.public_dns}
+  EOT
+}
