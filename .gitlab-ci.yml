@@ -12,7 +12,7 @@ pre-commit:
 
 terraform-validate:
   image:
-    name: hashicorp/terraform:1.7.5@sha256:386b7bff108f9fd3b79a2e0110190c162b5e4aebf26afe3eef028fd89532c17e
+    name: hashicorp/terraform:1.8.3@sha256:56234a3337d81a28595a4b08abc14db9da91a5ac1596817cbec0d681f2fc5374
     entrypoint:
       - "/usr/bin/env"
       - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"

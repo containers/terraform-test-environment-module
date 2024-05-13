@@ -22,7 +22,7 @@ data "aws_ami" "ami" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.6.0"
+  version = "5.8.1"
 
   name = var.environment
   cidr = "10.0.0.0/16"
